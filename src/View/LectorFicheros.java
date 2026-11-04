@@ -1,9 +1,11 @@
+package View;
+
+import Controler.Controlador;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class LectorFicheros {
     private JPanel ventana;
@@ -16,44 +18,34 @@ public class LectorFicheros {
     private JScrollPane ScrollPanel1;
     private JScrollPane ScrollPanel2;
     private JScrollPane ScrollPanel3;
-    private static final String RUTA_DIR="Ficheros/";
+    private static final String RUTA_DIR="src/Resources/";
     private static final String RUTA_FILE1="texto_de_prueba_1.txt";
     private static final String RUTA_FILE2="texto_de_prueba_2.txt";
+
+    public Controlador controlador=new Controlador();
 
     public LectorFicheros() {
         btnCargarFichero.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtArea1.setLineWrap(true);        // Activa el ajuste de línea automático
-                txtArea1.setWrapStyleWord(true);
-                try(BufferedReader br=new BufferedReader(new FileReader(RUTA_DIR+RUTA_FILE1))){
-
-                    String line;
-
-                    while ((line=br.readLine())!=null){
-                        txtArea1.append(line);
-
-                    }
-                }catch (IOException f){
-                    System.out.println("ERROR: "+f.getMessage());
-                }
+                controlador.cargarFichero(txtArea1,RUTA_DIR+RUTA_FILE1);
             }
         });
         btnCargarFichero2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                txtArea2.setLineWrap(true);
-                txtArea2.setWrapStyleWord(true);
-                try(BufferedReader br=new BufferedReader(new FileReader(RUTA_DIR+RUTA_FILE2))){
-
-                    String line;
-
-                    while ((line=br.readLine())!=null){
-                        txtArea2.append(line);
-
-                    }
-                }catch (IOException f){
-                    System.out.println("ERROR: "+f.getMessage());
+              controlador.cargarFichero(txtArea2,RUTA_DIR+RUTA_FILE2);
+            }
+        });
+        btnComparar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (txtArea1.getText().isEmpty() || txtArea2.getText().isEmpty() ){
+                    JOptionPane.showMessageDialog(null,"No se puede comparar si no hay textos cargados");
+                }
+                else {
+                    controlador.compararTexto(RUTA_DIR + RUTA_FILE1, RUTA_DIR + RUTA_FILE2, txtAreaResultado);
+                    txtAreaResultado.setForeground(Color.red);
                 }
             }
         });
